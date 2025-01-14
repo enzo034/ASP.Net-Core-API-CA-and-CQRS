@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Scl.Api.Controllers.V1
 {
     [ApiVersion("1.0")]
-    [ApiController]
-    [Route("api/v1/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiController] 
     public class PostsController : Controller
     {
         [HttpGet]
