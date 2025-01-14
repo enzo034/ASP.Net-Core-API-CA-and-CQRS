@@ -1,0 +1,6 @@
+@Scl.Api_HostAddress = http://localhost:5216
+
+GET {{Scl.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
