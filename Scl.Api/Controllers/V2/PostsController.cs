@@ -1,5 +1,4 @@
-﻿using Domain.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Scl.Api.Controllers.V2
 {
@@ -12,8 +11,7 @@ namespace Scl.Api.Controllers.V2
         [Route("{id}")]
         public IActionResult GetById(int id)
         {
-            var post = new Post { Id = id, Text = "Hello, universe" };
-            return Ok(post);
+            return Ok();
         }
     }
 }
