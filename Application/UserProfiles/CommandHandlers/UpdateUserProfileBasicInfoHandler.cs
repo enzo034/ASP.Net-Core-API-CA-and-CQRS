@@ -1,8 +1,8 @@
 ﻿using Application.UserProfiles.Commands;
-using AutoMapper;
 using Data_Access_Layer;
 using Domain.Aggregates.UserProfileAggregate;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,24 +11,26 @@ using System.Threading.Tasks;
 
 namespace Application.UserProfiles.CommandHandlers
 {
-    public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, UserProfile>
+    internal class UpdateUserProfileBasicInfoHandler : IRequestHandler<UpdateUserProfileBasicInfo, Unit>
     {
         private readonly DataContext _ctx;
-        public CreateUserCommandHandler(DataContext ctx)
+        public UpdateUserProfileBasicInfoHandler(DataContext ctx)
         {
             _ctx = ctx;
         }
-
-        public async Task<UserProfile> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateUserProfileBasicInfo request, CancellationToken cancellationToken)
         {
+            var userProfile = await _ctx.UserProfiles
+                .FirstOrDefaultAsync(up => up.UserProfileId == request.UserProfileId);
+
             var basicInfo = BasicInfo.CreateBasicInfo(request.FirstName, request.LastName, request.EmailAddress, request.Phone, request.DateOfBirth, request.CurrentCity);
 
-            var userProfile = UserProfile.CreateUserProfile(Guid.NewGuid().ToString(), basicInfo);
+            userProfile.UpdateBasicInfo(basicInfo);
 
-            _ctx.UserProfiles.Add(userProfile);
+            _ctx.UserProfiles.Update(userProfile);
             await _ctx.SaveChangesAsync();
 
-            return userProfile;
+            return new Unit();
         }
     }
 }
